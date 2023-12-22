@@ -9,28 +9,22 @@ Base = declarative_base()
 
 class Follower (Base):
     __tablename__ = 'follower'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     user_from_id = Column(Integer,  ForeignKey ('user.id'))
     user_to_id = Column(Integer,  ForeignKey ('user.id'))
 
 
-
 class User (Base):
     __tablename__ = 'user'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     username = Column(String(30), nullable=False)
     first_name = Column (String(30), nullable=False)
     last_name = Column (String(30), nullable=False)
     email = Column (String (50), nullable=False)
 
+
 class Media (Base):
     __tablename__ = 'media'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     type = Column(String(250), nullable=False)
     url = Column (String (250), nullable=False)
@@ -38,10 +32,14 @@ class Media (Base):
 
 class Post (Base):
     __tablename__ = 'post'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    user_id = Column (Integer, ForeignKey ('user.[oid'))
+    user_id = Column (Integer, ForeignKey ('user.id'))
+
+class Likes (Base):
+    __tablename__ = 'likes'
+    id = Column(Integer, primary_key=True)
+    post_id = Column (Integer, ForeignKey ('post.id')) 
+    liked_by_followers = Column (Integer, ForeignKey ('follower.id'))
 
 
 class Comment(Base):
@@ -50,7 +48,17 @@ class Comment(Base):
     comment_text = Column(String(250))
     author_id = Column(Integer, ForeignKey ('user.id'))
     post_id = Column (Integer, ForeignKey ('post.id')) 
-    
+
+class Share (Base):
+    __tablename__ = 'share'
+    id = Column(Integer, primary_key=True) 
+    post_id = Column (Integer, ForeignKey ('post.id')) 
+    shared_by_follower = Column (Integer, ForeignKey ('follower.id'))
+
+class Save (Base):
+    __tablename__ = 'save'
+    id = Column(Integer, primary_key=True)
+    post_id = Column (Integer, ForeignKey ('post.id')) 
 
     def to_dict(self):
         return {}
